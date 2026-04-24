@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Painel de Mensagens</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: #eee; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .card { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #25d366; }
+        .hora { color: #25d366; font-size: 0.8em; display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📥 Mensagens Recebidas</h2>
+        <button onclick="location.reload()" style="background:#25d366; border:none; padding:10px; color:white; border-radius:5px; cursor:pointer; width:100%; margin-bottom:20px;">Atualizar Mensagens</button>
+        
+        {% for m in mensagens %}
+            <div class="card">{{ m }}</div>
+        {% endfor %}
+    </div>
+</body>
+</html>
