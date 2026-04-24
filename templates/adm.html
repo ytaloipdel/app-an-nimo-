@@ -1,32 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
     <title>Painel - {{ nome }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: #eee; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        .btn-convidar { background: #007bff; color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-size: 14px; }
-        .link-area { background: #333; padding: 10px; margin: 15px 0; border-radius: 5px; color: #25d366; }
-        .card { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #25d366; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: #1e1e1e; padding: 20px; border-radius: 10px; border-bottom: 3px solid #25d366; margin-bottom: 20px; }
+        .btn { background: #25d366; color: black; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s; border: none; cursor: pointer; }
+        .btn:hover { background: #1da851; }
+        .link-box { background: #2c2c2c; padding: 15px; border-radius: 8px; border: 1px dashed #25d366; margin-bottom: 30px; }
+        .link-url { color: #25d366; font-family: monospace; word-break: break-all; }
+        .msg-card { background: #1e1e1e; padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 5px solid #25d366; animation: fadeIn 0.5s; }
+        .msg-data { font-size: 0.8em; color: #888; margin-bottom: 5px; display: block; }
+        .vazio { text-align: center; color: #666; margin-top: 50px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h2>📥 Mensagens: {{ nome }}</h2>
-        <a href="/gerar_link" class="btn-convidar">➕ Gerar Novo Link de Convite</a>
-    </div>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1 style="margin:0; font-size: 1.5em;">{{ nome }}</h1>
+                <small>Painel de Controle</small>
+            </div>
+            <a href="/gerar_link" class="btn">🔄 Gerar Novo Link</a>
+        </div>
 
-    {% if link_convite %}
-    <div class="link-area">
-        <strong>Link para os funcionários:</strong><br>
-        https://app-an-nimo.onrender.com/enviar/{{ link_convite }}
-    </div>
-    {% endif %}
+        {% if link_convite %}
+        <div class="link-box">
+            <strong>🔗 Link Atual para Receber Mensagens:</strong><br>
+            <p class="link-url">https://app-an-nimo.onrender.com/enviar/{{ link_convite }}</p>
+            <small style="color: #888;">(Ao gerar um novo, este parará de funcionar)</small>
+        </div>
+        {% else %}
+        <div class="link-box" style="border-color: #ff4444;">
+            <p>⚠️ Você ainda não gerou um link. Clique no botão acima para começar!</p>
+        </div>
+        {% endif %}
 
-    <div style="margin-top: 20px;">
-        {% for m in mensagens %}
-            <div class="card">{{ m }}</div>
-        {% endfor %}
+        <h3>📥 Mensagens Recebidas</h3>
+        {% if mensagens %}
+            {% for m in mensagens %}
+                <div class="msg-card">
+                    <span class="msg-data">Relato Recebido</span>
+                    {{ m }}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="vazio">
+                <p>Nenhuma mensagem recebida ainda.</p>
+            </div>
+        {% endif %}
+        
+        <br>
+        <a href="/sair" style="color: #ff4444; text-decoration: none; font-size: 0.9em;">Logout / Sair</a>
     </div>
 </body>
 </html>
