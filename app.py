@@ -1,10 +1,14 @@
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, request, redirect, session
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = "uma-chave-muito-secreta-aqui" # Isso protege a sessão
 
-# Essa é a senha que você vai usar no link para entrar no seu app
-SENHA_ADMIN = "ytalo123"
+# Dados de acesso (Depois podemos colocar isso num banco de dados)
+USUARIO_ADM = "admin"
+SENHA_ADM = "empresa123"
+ARQUIVO_TXT = "mensagens.txt"
 
 @app.route('/')
 def pagina_inicial():
@@ -15,26 +19,41 @@ def receber_mensagem():
     msg = request.form.get('conteudo')
     if msg:
         agora = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        with open("mensagens.txt", "a", encoding="utf-8") as arquivo:
+        with open(ARQUIVO_TXT, "a+", encoding="utf-8") as arquivo:
             arquivo.write(f"[{agora}] {msg}\n")
-    return "<h1>Enviado com sucesso!</h1><br><a href='/'>Voltar</a>"
+    return "<h1>Enviado com anonimato!</h1><br><a href='/'>Voltar</a>"
 
-# --- SEU APP PARA RECEBER AS MENSAGENS ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        usuario = request.form.get('usuario')
+        senha = request.form.get('senha')
+        
+        if usuario == USUARIO_ADM and senha == SENHA_ADM:
+            session['logado'] = True
+            return redirect('/meuapp')
+        else:
+            return render_template('login.html', erro="Usuário ou senha incorretos!")
+    
+    return render_template('login.html')
+
 @app.route('/meuapp')
 def ver_mensagens():
-    senha = request.args.get('senha')
-    
-    if senha != SENHA_ADMIN:
-        return "<h1>Acesso negado!</h1>", 403
+    # Verifica se o "crachá" de logado existe na sessão
+    if not session.get('logado'):
+        return redirect('/login')
 
     lista = []
-    try:
-        with open("mensagens.txt", "r", encoding="utf-8") as arquivo:
+    if os.path.exists(ARQUIVO_TXT):
+        with open(ARQUIVO_TXT, "r", encoding="utf-8") as arquivo:
             lista = arquivo.readlines()
-    except:
-        lista = ["Nenhuma mensagem ainda."]
-
+    
     return render_template('adm.html', mensagens=lista)
+
+@app.route('/sair')
+def sair():
+    session.clear()
+    return redirect('/login')
 
 if __name__ == '__main__':
     app.run(debug=True)
