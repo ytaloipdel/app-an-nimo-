@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <title>Chat Anonimo</title>
+    <meta charset="UTF-8">
+    <title>Canal de Ética - {{ nome }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { background: #e5ddd5; font-family: sans-serif; text-align: center; padding: 20px; }
-        .caixa { background: white; padding: 20px; border-radius: 10px; max-width: 300px; margin: auto; }
-        textarea { width: 100%; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px; }
-        button { background: #25d366; color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; text-align: center; }
+        .caixa { max-width: 500px; margin: auto; background: #1e1e1e; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        textarea { width: 100%; height: 150px; border-radius: 10px; padding: 10px; border: 1px solid #444; background: #2c2c2c; color: white; margin-bottom: 15px; box-sizing: border-box; }
+        button { background: #25d366; color: black; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #1da851; }
     </style>
 </head>
 <body>
     <div class="caixa">
-        <h3>Mande uma mensagem anônima</h3>
-        <form action="/enviar" method="post">
-            <textarea name="conteudo" rows="4" placeholder="Escreva aqui..."></textarea>
-            <button type="submit">Enviar pelo WhatsApp</button>
+        <h2>Canal de Ética: {{ nome }}</h2>
+        <p style="color: #bbb;">Sua identidade será preservada. Relate abusos, sugestões ou reclamações abaixo:</p>
+        
+        <form action="/processar_envio" method="POST">
+            <input type="hidden" name="id_destino" value="{{ id_destino }}">
+            <textarea name="conteudo" placeholder="Descreva o ocorrido com o máximo de detalhes..." required></textarea>
+            <button type="submit">Enviar Relato Anônimo</button>
         </form>
     </div>
 </body>
